@@ -1,5 +1,10 @@
 # 1985-Delay
 A Digital Delay pedal for guitar built around the AVR128DA28 MCU
+    
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
  * Copyright 2025 Samuel Brown. All Rights Reservered.
  * 
  * Licensed under Creative Commons CC-BY-NC-SA 4.0
