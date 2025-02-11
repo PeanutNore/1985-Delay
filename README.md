@@ -11,3 +11,9 @@ A Digital Delay pedal for guitar built around the AVR128DA28 MCU
  * under the same CC-BY-NC-SA license.
  * 
  * For commercial licensing contact sam.brown.rit08@gmail.com
+
+To use this software you will need:
+* Arduino IDE version 1.8.19 or greater
+* DxCore library for AVR128DA28 support (https://github.com/SpenceKonde/DxCore)
+* Any USB to UPDI programmer. I recommend the Adafruit UPDI Friend because it is easy to use and under $20
+* An AVR128DA28 MCU and appropriate supporting circuitry. Refer to the KiCad schematic and board files included in this repository.
