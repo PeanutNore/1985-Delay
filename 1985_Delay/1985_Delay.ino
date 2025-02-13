@@ -88,6 +88,8 @@ ISR(TCA0_OVF_vect) {
   sampleOutHigh = sampleOut >> 2;              //variable for to sends the 8 highest bits of the sample to the DAC 
   DAC0.DATAL = sampleOutLow;                  //make sending of low bits
   DAC0.DATAH = sampleOutHigh;                 //make sending of high bits and be triggering DAC output
+  sampleStep++;
+  if (sampleStep > 14335){sampleStep = 0;}
   TCA0.SINGLE.INTFLAGS = 1;                 //clear the interrupt flags
 }
 
