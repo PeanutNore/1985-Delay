@@ -17,6 +17,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * 
  * For commercial licensing contact sam.brown.rit08@gmail.com
 
+The maximum delay time available depends on the sample rate used and the bit depth of delay samples.
+Main branch (1985_Delay) provides 1.4 seconds of delay at 10kHz and 8 bits and is tested and working with minor issues.
+Highres branch (1985_Delay_Highres) provides 700ms of delay at 10kHz and 12 bits and is untested.
+
+Adjust the sample rate as desired to balance available delay time and audio quality.
+
 To use this software you will need:
 * Arduino IDE version 1.8.19 or greater
 * DxCore library for AVR128DA28 support (https://github.com/SpenceKonde/DxCore)
