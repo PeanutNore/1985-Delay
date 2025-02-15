@@ -1,7 +1,7 @@
 /* 1985 Delay
  * Digital Delay Pedal for Guitar
  * High resolution version with half delay time - reads and stores full 12 bit samples in delay array
- * Version 0.1 
+ * Version 0.2 - tested and working on breadboard
  * 
  *
  * 
@@ -119,7 +119,7 @@ takeOverTCA0();
 TCA0.SINGLE.INTFLAGS = 1;
 TCA0.SINGLE.INTCTRL  = 0b00000001; // overflow interrupt every PER cycles
 TCA0.SINGLE.CTRLA    = 0b00000110; // Clock prescaler / 8 (3 MHz)    
-TCA0.SINGLE.PER      = 300;        // 300 * 8 = 2400 clocks, for a 10kHz sample rate
+TCA0.SINGLE.PER      = 200;        // 300 * 8 = 2400 clocks, for a 10kHz sample rate, 200 * 8 = 1600 clocks 15kHz sample rate, 150 * 8 = 1200 clocks 20kHz sample rate
 TCA0.SINGLE.CTRLA   |= 1;          // Enables the timer                 
 
 }
