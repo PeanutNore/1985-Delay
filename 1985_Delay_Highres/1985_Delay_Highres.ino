@@ -74,7 +74,7 @@ ISR(TCA0_OVF_vect) {
   sampleFbk = sampleFbk >> feedbackS[fbk];
   mathFbk = sampleFbk - feedbackO[fbk];
   //experiment follows to eliminate undesired infinite repeats
-  if (mathFbk < 7 && mathFbk > -8) {mathFbk = 0;} //gets rid of very small feedback samples
+  if (mathFbk < 8 && mathFbk > -9) {mathFbk = 0;} //gets rid of insignificant feedback samples
   //experiment concludes
   mathFbk += mathIn;
   mathFbk += 2048;
@@ -114,6 +114,7 @@ pinMode(TimePin, INPUT);
 pinMode(MixPin, INPUT);
 pinMode(FbkPin, INPUT);
 analogReference(EXTERNAL);
+DACReference(EXTERNAL); //found to be missing when testing on final hardware- not an issue on the breadboard running everything at 5V
 analogReadResolution(12);
 analogSampleDuration(0);
 delayTime = analogRead(TimePin);
