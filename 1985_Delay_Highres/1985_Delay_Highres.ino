@@ -57,20 +57,25 @@ uint8_t feedbackS[8] = {0, 2, 1, 3, 2, 4, 3, 0};
 uint16_t feedbackO[8] = {2048, 1536, 1024, 768, 512, 384, 256, 0};
 
 ISR(TCA0_OVF_vect) {
+  //experiment here - clearing the interrupt flag first
+  TCA0.SINGLE.INTFLAGS = TCA_SINGLE_OVF_bm;                 //clear the interrupt flags
+  //this concludes the experiment. don't forget about the commented line below.
   delayTime = analogRead(TimePin) >> 2;
   delayTime *= 7;
-  mix = analogRead(MixPin) >> 8;
-  fbk = analogRead(FbkPin) >> 9;
   delayStep = sampleStep + 1;
   delayStep += delayTime;
   if (delayStep > 7167) {delayStep -= 7168;}
-  sampleDelay = delayArray[delayStep];
   sampleIn = analogRead(InputPin);
   mathIn = sampleIn - 2048;
+  sampleDelay = delayArray[delayStep];
   //compute the feedback amount and store the new sample with feedback in the delay array
+  fbk = analogRead(FbkPin) >> 9;
   sampleFbk = sampleDelay * feedbackF[fbk];
   sampleFbk = sampleFbk >> feedbackS[fbk];
   mathFbk = sampleFbk - feedbackO[fbk];
+  //experiment follows to eliminate undesired infinite repeats
+  if (mathFbk < 7 && mathFbk > -8) {mathFbk = 0;} //gets rid of very small feedback samples
+  //experiment concludes
   mathFbk += mathIn;
   mathFbk += 2048;
   if (mathFbk > 4095){mathFbk = 4095;}
@@ -78,6 +83,7 @@ ISR(TCA0_OVF_vect) {
   sampleFbk = mathFbk;
   delayArray[sampleStep] = sampleFbk;
   //compute the mix of sample in and delay sample and prepare sample out
+  mix = analogRead(MixPin) >> 8;
   sampleIn = sampleIn * sampleMixF[mix];
   sampleIn = sampleIn >> sampleMixS[mix];
   mathIn = sampleIn - sampleMixO[mix];
@@ -91,11 +97,11 @@ ISR(TCA0_OVF_vect) {
   sampleOut = mathOut >> 2;
   sampleOutLow = sampleOut << 6;               //variable for to sends the 2 lowest bits of the audio sample to the DAC
   sampleOutHigh = sampleOut >> 2;              //variable for to sends the 8 highest bits of the sample to the DAC 
-  DAC0.DATAL = sampleOutLow;                  //make sending of low bits
-  DAC0.DATAH = sampleOutHigh;                 //make sending of high bits and be triggering DAC output
   sampleStep++;
   if (sampleStep > 7167){sampleStep = 0;}
-  TCA0.SINGLE.INTFLAGS = 1;                 //clear the interrupt flags
+  DAC0.DATAL = sampleOutLow;                  //make sending of low bits
+  DAC0.DATAH = sampleOutHigh;                 //make sending of high bits and be triggering DAC output
+  //TCA0.SINGLE.INTFLAGS = TCA_SINGLE_OVF_bm;                 //clear the interrupt flags (commented out for experiment)
 }
 
 void setup() {
@@ -116,10 +122,10 @@ DAC0.DATAL = 0b00000000;
 DAC0.DATAH = 0b10000000;
 DAC0.CTRLA = 0b11000001;
 takeOverTCA0();
-TCA0.SINGLE.INTFLAGS = 1;
+TCA0.SINGLE.INTFLAGS = TCA_SINGLE_OVF_bm;
 TCA0.SINGLE.INTCTRL  = 0b00000001; // overflow interrupt every PER cycles
-TCA0.SINGLE.CTRLA    = 0b00000110; // Clock prescaler / 8 (3 MHz)    
-TCA0.SINGLE.PER      = 200;        // 300 * 8 = 2400 clocks, for a 10kHz sample rate, 200 * 8 = 1600 clocks 15kHz sample rate, 150 * 8 = 1200 clocks 20kHz sample rate
+TCA0.SINGLE.CTRLA    = TCA_SINGLE_CLKSEL_DIV1_gc; // Clock prescaler / 1 (24 MHz)    
+TCA0.SINGLE.PER      = 1600;        // 300 * 8 = 2400 clocks, for a 10kHz sample rate, 200 * 8 = 1600 clocks 15kHz sample rate, 150 * 8 = 1200 clocks 20kHz sample rate, 125 * 8 = 1000 clocks 24kHz sample rate
 TCA0.SINGLE.CTRLA   |= 1;          // Enables the timer                 
 
 }
