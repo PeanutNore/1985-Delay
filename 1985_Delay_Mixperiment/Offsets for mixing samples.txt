@@ -1,0 +1,26 @@
+Offsets to convert from unsigned to signed for each sixteenth
+Starting with a 12 bit single ended sample from 0-4095 where midpoint is 2048
+
+Multiply by factor
+Divide by 16 by shifting right 4 bits
+Add offset to get 
+
+
+Factor	Midpoint	Midpoint after Divide	Offset back to 2048 Midpoint
+1	2048		128			1920
+2	4096		256			1792
+3	6144		384			1664
+4	8192		512			1536
+5	10240		640			1408
+6	12288		768			1280
+7	14336		896			1152
+8	16384		1024			1024
+9	18432		1152			896
+10	20480		1280			768
+11	22528		1408			640
+12	24576		1536			512
+13	26624		1664			384
+14	28672		1792			256
+15	30720		1920			128
+16	32768		2048			0
+
