@@ -47,7 +47,7 @@ ISR(TCA0_OVF_vect) {
   //add the dry sample
   storeSample += drySample;
   //convert to signed int
-  delaySample = storeSample * 4095;
+  delaySample = storeSample * 2048;
   //store the signed int sample in the delay
   delayArray[sampleStep] = delaySample;
   //attenuate the wet sample
